@@ -1,4 +1,4 @@
-package hw02;
+package ru.otus.homework.hw02;
 
 import java.util.Arrays;
 

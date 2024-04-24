@@ -1,14 +1,22 @@
-package hw03;
+package ru.otus.homework.hw03;
+
+import java.util.Arrays;
 
 public class Homework3 {
     public static void main(String[] args) {
         int sumElements = sumOfPositiveElements(new int[][]{{-1, -2, 3}, {1, -2, 3}});
         System.out.println(sumElements);
+
         printSquare(4);
-        diagonalElementsinArray(new int[6][6]);
+
+        int[][] array = new int[][]{{1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}};
+        diagonalElementsinArray(array);
+        print(array);
+
         int maxElement = findMax(new int[][]{{-1, 999, 3}, {1, -2, 3}});
         System.out.println(maxElement);
-        int sum = sumElementsRow(new int[][]{{-1, 999, 3}, {-1, 9, 3, 10}});
+
+        int sum = sumElementsRow(new int[][]{{-1, 999, 3}});
         System.out.println(sum);
     }
 
@@ -25,11 +33,9 @@ public class Homework3 {
     }
 
     public static void printSquare(int size) {
-        char[][] array = new char[size][size];
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array.length; j++) {
-                array[i][j] = '*';
-                System.out.print(array[i][j] + " ");
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print('*' + " ");
             }
             System.out.println();
         }
@@ -37,17 +43,14 @@ public class Homework3 {
 
     public static void diagonalElementsinArray(int[][] array) {
         for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++) {
-                array[i][j] = (i == j) ? 0 : i + j;
-                array[i][array.length - i - 1] = 0;
-                System.out.print(array[i][j] + " ");
-            }
-            System.out.println();
+            array[i][i] = 0;
+            array[i][array.length - i - 1] = 0;
         }
     }
 
+
     public static int findMax(int[][] array) {
-        int max = 0;
+        int max = array[0][0];
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
                 max = Math.max(array[i][j], max);
@@ -57,14 +60,20 @@ public class Homework3 {
     }
 
     public static int sumElementsRow(int[][] array) {
-        int sum = 0;
-        if (array[1].length == 0) {
+        if (array.length < 2) {
             return -1;
-        } else {
-            for (int j = 0; j < array[1].length; j++) {
-                sum += array[1][j];
-            }
+        }
+
+        int sum = 0;
+        for (int j = 0; j < array[1].length; j++) {
+            sum += array[1][j];
         }
         return sum;
+    }
+
+    public static void print(int[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(Arrays.toString(array[i]));
+        }
     }
 }

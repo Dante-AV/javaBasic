@@ -1,5 +1,9 @@
 package ru.otus.homework.hw05;
 
+import ru.otus.homework.hw05.animals.Cat;
+import ru.otus.homework.hw05.animals.Dog;
+import ru.otus.homework.hw05.animals.Horse;
+
 public class Main {
     public static void main(String[] args) {
         Cat cat = new Cat("Барсик", 2, 20);

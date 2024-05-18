@@ -22,11 +22,11 @@ public class Cat {
         }
     }
 
-    public void printInfo() {
+    public void printInfo(Plate plate) {
         if (isSatiety()) {
-            System.out.println("Кот " + name + " сыт");
+            System.out.println("Кот " + name + " сыт. В тарелке осталось " + plate.getCurrentFoodQuanity() + " кусков еды");
         } else {
-            System.out.println("Коту " + name + " мало еды");
+            System.out.println("Коту " + name + " мало еды, в тарелке " + plate.getCurrentFoodQuanity() + " кусков еды");
         }
     }
 }

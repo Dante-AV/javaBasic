@@ -7,6 +7,10 @@ public class Plate {
     private int currentFoodQuanity;
 
 
+    public int getCurrentFoodQuanity() {
+        return currentFoodQuanity;
+    }
+
     public Plate(int maxFoodQuanity, int currentFoodQuanity) {
         this.maxFoodQuanity = maxFoodQuanity;
         this.currentFoodQuanity = currentFoodQuanity;
@@ -22,8 +26,8 @@ public class Plate {
     }
 
     public boolean removeFood(int appetite) {
-        currentFoodQuanity = currentFoodQuanity - appetite;
-        if (currentFoodQuanity >= 0) {
+        if (currentFoodQuanity - appetite >= 0) {
+            currentFoodQuanity = currentFoodQuanity - appetite;
             return true;
         } else {
             return false;

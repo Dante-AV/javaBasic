@@ -26,7 +26,7 @@ public class Plate {
     }
 
     public boolean removeFood(int appetite) {
-        if (currentFoodQuanity - appetite >= 0) {
+        if (currentFoodQuanity >= 0 && currentFoodQuanity >= appetite) {
             currentFoodQuanity = currentFoodQuanity - appetite;
             return true;
         } else {

@@ -7,10 +7,6 @@ public class Plate {
     private int currentFoodQuanity;
 
 
-    public int getCurrentFoodQuanity() {
-        return currentFoodQuanity;
-    }
-
     public Plate(int maxFoodQuanity, int currentFoodQuanity) {
         this.maxFoodQuanity = maxFoodQuanity;
         this.currentFoodQuanity = currentFoodQuanity;

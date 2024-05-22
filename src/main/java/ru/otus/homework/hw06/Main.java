@@ -11,7 +11,7 @@ public class Main {
 
         for (var cat : cats) {
             cat.eat(plate);
-            cat.printInfo(plate);
+            cat.printInfo();
             plate.addFood();
         }
 

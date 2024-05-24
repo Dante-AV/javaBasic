@@ -1,7 +1,5 @@
 package ru.otus.homework.hw07;
 
-import java.util.Objects;
-
 public class AllTerrainVehicle implements Moveable, OpportunityToBurn {
     int petrol;
 
@@ -27,7 +25,7 @@ public class AllTerrainVehicle implements Moveable, OpportunityToBurn {
             this.petrol = petrol - distance;
             return true;
         } else {
-            this.petrol = distance - (petrol - (petrol - distance));
+            this.petrol = 0;
             return false;
         }
     }

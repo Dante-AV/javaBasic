@@ -1,7 +1,5 @@
 package ru.otus.homework.hw07;
 
-import java.util.Objects;
-
 public class Car implements Moveable, OpportunityToBurn {
     private int petrol;
 
@@ -12,16 +10,15 @@ public class Car implements Moveable, OpportunityToBurn {
 
     @Override
     public boolean move(int distance, TerrainType terrainType) {
-        if (Objects.equals(terrainType, TerrainType.PLAIN)) {
-            if (expend(distance)) {
-                System.out.println("Человек едет на машине по типу местности " + terrainType.getName() + ", количество бензина - " + petrol);
-                return true;
-            } else {
-                System.out.println("Машина не может передвигаться, количество бензина = " + petrol);
-                return false;
-            }
+        if (terrainType != TerrainType.PLAIN) {
+            System.out.println("Машина не может передвигаться по типу местности " + terrainType.getName());
+            return false;
         }
-        System.out.println("Машина не может передвигаться по типу местности " + terrainType.getName());
+        if (expend(distance)) {
+            System.out.println("Человек едет на машине по типу местности " + terrainType.getName() + ", количество бензина - " + petrol);
+            return true;
+        }
+        System.out.println("Машина не может передвигаться, количество бензина = " + petrol);
         return false;
     }
 
@@ -31,7 +28,7 @@ public class Car implements Moveable, OpportunityToBurn {
             this.petrol = petrol - distance;
             return true;
         } else {
-            this.petrol = distance - (petrol - (petrol - distance));
+            this.petrol = 0;
             return false;
         }
     }

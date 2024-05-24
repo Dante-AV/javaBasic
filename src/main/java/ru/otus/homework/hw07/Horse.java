@@ -1,8 +1,7 @@
 package ru.otus.homework.hw07;
 
-import java.util.Objects;
 
-public class Horse implements Moveable, OpportunityToBurn{
+public class Horse implements Moveable, OpportunityToBurn {
     int force;
 
     public Horse(int force) {
@@ -11,16 +10,15 @@ public class Horse implements Moveable, OpportunityToBurn{
 
     @Override
     public boolean move(int distance, TerrainType terrainType) {
-        if (!Objects.equals(terrainType, TerrainType.SWAMP)) {
-            if (expend(distance)) {
-                System.out.println("Человек едет на лошади по типу местности " + terrainType.getName() + ", силы у лошади = " + force);
-                return true;
-            } else {
-                System.out.println("Лошадь не может передвигаться, силы у лошади = " + force);
-                return false;
-            }
+        if (terrainType == TerrainType.SWAMP) {
+            System.out.println("Лошадь не может передвигаться по типу местности " + terrainType.getName());
+            return false;
         }
-        System.out.println("Лошадь не может передвигаться по типу местности " + terrainType.getName());
+        if (expend(distance)) {
+            System.out.println("Человек едет на лошади по типу местности " + terrainType.getName() + ", силы у лошади = " + force);
+            return true;
+        }
+        System.out.println("Лошадь не может передвигаться, силы у лошади = " + force);
         return false;
     }
 
@@ -30,7 +28,7 @@ public class Horse implements Moveable, OpportunityToBurn{
             this.force = force - distance;
             return true;
         } else {
-            this.force = distance - (force - (force - distance));
+            this.force = 0;
             return false;
         }
     }

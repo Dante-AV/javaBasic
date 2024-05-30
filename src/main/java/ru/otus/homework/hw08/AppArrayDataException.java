@@ -11,5 +11,4 @@ public class AppArrayDataException extends RuntimeException {
         super(message);
         number = num;
     }
-
 }

@@ -2,9 +2,7 @@ package ru.otus.homework.hw08;
 
 public class Main {
     public static void main(String[] args) {
-
         String[][] array = new String[][]{{"1", "2", "3", "4"}, {"4", "3", "2", "1"}, {"4", "3", "2", "1"}, {"4", "3", "2", "1"}};
-
         try {
             sumElements(array);
             System.out.println(sumElements(array));

@@ -11,8 +11,8 @@ public class Main {
         changeElements(7, new ArrayList<>(Arrays.asList(1, 7, 3, 9)));
         employeeInfo(new ArrayList<>(Arrays.asList(new Employee("Иван", 35), new Employee("Алексей", 40), new Employee("Семен", 45))));
         employeeInfo(new ArrayList<>(Arrays.asList(new Employee("Иван", 35), new Employee("Алексей", 40), new Employee("Семен", 45))), 40);
-        compareAge(new ArrayList<>(Arrays.asList(new Employee("Иван", 35), new Employee("Алексей", 40), new Employee("Семен", 45))), 40);
-        youngEmployee(new ArrayList<>(Arrays.asList(new Employee("Иван", 35), new Employee("Алексей", 20), new Employee("Семен", 45))));
+        compareAge(new ArrayList<>(Arrays.asList(new Employee("Иван", 55), new Employee("Алексей", 40), new Employee("Семен", 45))), 40);
+        youngEmployee(new ArrayList<>(Arrays.asList(new Employee("Иван", 18), new Employee("Алексей", 20), new Employee("Семен", 45))));
     }
 
     public static List<Integer> printList(int min, int max) {
@@ -20,7 +20,6 @@ public class Main {
         for (int i = min; i <= max; i++) {
             list.add(i);
         }
-        System.out.println(list);
         return list;
     }
 
@@ -31,7 +30,6 @@ public class Main {
                 sum += num;
             }
         }
-        System.out.println(sum);
         return sum;
     }
 
@@ -39,14 +37,12 @@ public class Main {
         for (int i = 0; i < numbers.size(); i++) {
             numbers.set(i, num);
         }
-        System.out.println(numbers);
     }
 
     public static void changeElements(int num, List<Integer> numbers) {
         for (int i = 0; i < numbers.size(); i++) {
             numbers.set(i, numbers.get(i) + num);
         }
-        System.out.println(numbers);
     }
 
     public static List<String> employeeInfo(List<Employee> employees) {
@@ -54,7 +50,6 @@ public class Main {
         for (var employee : employees) {
             names.add(employee.getName());
         }
-        System.out.println(names);
         return names;
     }
 
@@ -65,25 +60,24 @@ public class Main {
                 employeesList.add(employee);
             }
         }
-        System.out.println(employeesList);
         return employeesList;
     }
 
     public static boolean compareAge(List<Employee> employees, int minAge) {
+        int averageAge;
+        int allAge = 0;
         for (var employee : employees) {
-            if (employee.getAge() > minAge) {
-                return true;
-            }
+            allAge += employee.getAge();
         }
-        return false;
+        averageAge = allAge / employees.size();
+        return averageAge > minAge;
     }
 
     public static Employee youngEmployee(List<Employee> employees) {
         Employee minAgeEmployee = employees.get(0);
         for (Employee employee : employees) {
-            minAgeEmployee = minAgeEmployee.getAge() < employee.getAge() ? new Employee(minAgeEmployee.getName(), minAgeEmployee.getAge()) : new Employee(employee.getName(), employee.getAge());
+            minAgeEmployee = minAgeEmployee.getAge() < employee.getAge() ? minAgeEmployee : employee;
         }
-        System.out.println(minAgeEmployee);
         return minAgeEmployee;
     }
 }

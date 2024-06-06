@@ -3,7 +3,7 @@ package ru.otus.homework.hw10;
 import java.util.*;
 
 public class PhoneBook {
-    Map<String, List<String>> map = new HashMap<>();
+    private Map<String, List<String>> map = new HashMap<>();
 
     public PhoneBook() {
     }

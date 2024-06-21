@@ -1,6 +1,6 @@
 package ru.otus.homework.hw11;
 
-public class sortArray {
+public class SortArray {
 
     public static void bubbleSort(int[] array) {
         int arr;

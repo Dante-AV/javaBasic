@@ -3,39 +3,40 @@ package ru.otus.homework.hw11;
 import java.util.*;
 
 public class PersonDataBase {
-    private final List<Person> personList = new ArrayList<>();
+    private final Map<Long, Person> personList = new HashMap();
+    private final Map<Position, Person> personList2 = new HashMap();
 
     public void add(Person person) {
-        personList.add(new Person(person.getName(), person.getPosition(), person.getId()));
+        personList.put(person.getId(), person);
+        personList2.put(person.getPosition(), person);
     }
 
 
     public Person findById(Long id) {
         Person personById = null;
-        for (int i = 0; i < personList.size(); i++) {
-            if (id.equals(personList.get(i).getId())) {
-                personById = personList.get(i);
-            }
+        if (personList.containsKey(id)) {
+            personById = personList.get(id);
         }
         return personById;
     }
 
     public boolean isManager(Person person) {
-        return person.getPosition() == Position.MANAGER || person.getPosition() == Position.DIRECTOR ||
-                person.getPosition() == Position.BRANCH_DIRECTOR || person.getPosition() == Position.SENIOR_MANAGER;
+        if (personList2.containsKey(person.getPosition())) {
+            if (personList2.containsKey(Position.MANAGER) || personList2.containsKey(Position.DIRECTOR) ||
+                    personList2.containsKey(Position.BRANCH_DIRECTOR) || personList2.containsKey(Position.SENIOR_MANAGER)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isEmployee(Long id) {
-        boolean isEmployee = false;
-        for (int i = 0; i < personList.size(); i++) {
-            if (id.equals(personList.get(i).getId())) {
-                if (!(personList.get(i).getPosition() == Position.MANAGER || personList.get(i).getPosition() == Position.DIRECTOR ||
-                        personList.get(i).getPosition() == Position.BRANCH_DIRECTOR || personList.get(i).getPosition() == Position.SENIOR_MANAGER)) {
-                    return true;
-                }
-            }
+        Position personPosition = personList.get(id).getPosition();
+        if (!(personPosition.equals(Position.MANAGER) || personPosition.equals(Position.DIRECTOR) ||
+                personPosition.equals(Position.BRANCH_DIRECTOR) || personPosition.equals(Position.SENIOR_MANAGER))) {
+            return true;
         }
-        return isEmployee;
+        return false;
     }
 
     @Override

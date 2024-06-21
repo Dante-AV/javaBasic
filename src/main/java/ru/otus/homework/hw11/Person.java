@@ -1,9 +1,9 @@
 package ru.otus.homework.hw11;
 
 public class Person {
-    private final String name;
+    private String name;
     private final Position position;
-    private final Long id;
+    private Long id;
 
     public Person(String name, Position position, Long id) {
         this.name = name;
@@ -11,8 +11,8 @@ public class Person {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Person(Position position) {
+        this.position = position;
     }
 
     public Position getPosition() {

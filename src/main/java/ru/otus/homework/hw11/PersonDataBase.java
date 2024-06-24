@@ -2,13 +2,14 @@ package ru.otus.homework.hw11;
 
 import java.util.*;
 
+import static ru.otus.homework.hw11.Position.*;
+
 public class PersonDataBase {
     private final Map<Long, Person> personList = new HashMap();
-    private final Map<Position, Person> personList2 = new HashMap();
+    private static final Set<Position> MANAGER_POSITIONS = Set.of(MANAGER, DIRECTOR, BRANCH_DIRECTOR, SENIOR_MANAGER);
 
     public void add(Person person) {
         personList.put(person.getId(), person);
-        personList2.put(person.getPosition(), person);
     }
 
 
@@ -21,22 +22,16 @@ public class PersonDataBase {
     }
 
     public boolean isManager(Person person) {
-        if (personList2.containsKey(person.getPosition())) {
-            if (personList2.containsKey(Position.MANAGER) || personList2.containsKey(Position.DIRECTOR) ||
-                    personList2.containsKey(Position.BRANCH_DIRECTOR) || personList2.containsKey(Position.SENIOR_MANAGER)) {
-                return true;
-            }
-        }
-        return false;
+        return MANAGER_POSITIONS.contains(person.getPosition());
     }
 
     public boolean isEmployee(Long id) {
-        Position personPosition = personList.get(id).getPosition();
-        if (!(personPosition.equals(Position.MANAGER) || personPosition.equals(Position.DIRECTOR) ||
-                personPosition.equals(Position.BRANCH_DIRECTOR) || personPosition.equals(Position.SENIOR_MANAGER))) {
-            return true;
+        boolean isEmployee = false;
+        if (personList.containsKey(id)) {
+            Position personPosition = personList.get(id).getPosition();
+            isEmployee = !MANAGER_POSITIONS.contains(personPosition);
         }
-        return false;
+        return isEmployee;
     }
 
     @Override

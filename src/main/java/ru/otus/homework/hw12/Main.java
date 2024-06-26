@@ -1,7 +1,6 @@
 package ru.otus.homework.hw12;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,12 +8,11 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        boolean isExit = false;
         String myNameFiles = null;
         List<File> files = new ArrayList<>();
-        String dirPath = "D:/javaBasic/";
+        String path = new File("").getAbsolutePath();
 
-        File fileDirectory = new File(dirPath);
+        File fileDirectory = new File(path);
         File[] fileList;
         if (fileDirectory.isDirectory()) {
             fileList = fileDirectory.listFiles();
@@ -27,35 +25,28 @@ public class Main {
                 }
             }
         }
-
-        while (!isExit) {
-            String name = scanner.nextLine();
-            for (File file : files) {
-                if (file.getName().equals(name)) {
-                    myNameFiles = file.getName();
-                    //  isExit = true;
-                } else {
-                    isExit = true;
-                }
+        String name = scanner.nextLine();
+        for (File file : files) {
+            if (file.getName().equals(name)) {
+                myNameFiles = file.getName();
+                break;
             }
         }
 
         if (myNameFiles != null) {
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(myNameFiles))) {
-                int n = reader.read();
-                while (n != -1) {
-                    System.out.print((char) n);
-                    n = reader.read();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(myNameFiles)))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         }
         if (myNameFiles != null) {
-            try (FileOutputStream out = new FileOutputStream(myNameFiles, true)) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(myNameFiles, true)))) {
                 String text = scanner.nextLine();
-                byte[] buffer = text.getBytes(StandardCharsets.UTF_8);
-                out.write(buffer);
+                writer.write(text);
             } catch (
                     IOException e) {
                 e.printStackTrace();

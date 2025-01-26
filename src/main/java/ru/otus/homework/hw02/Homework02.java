@@ -12,6 +12,7 @@ public class Homework02 {
         sumArrays(new int[]{1, 2, 3}, new int[]{2, 2}, new int[]{1, 1, 1, 1, 1});
         reverseElements(new int[]{1, 2, 3, 4, 5});
         sortElements(new int[]{1, 2, 3, 4, 5});
+        compareSumElements(new int[]{2, 2, 1, 1, 2});
     }
 
     public static void printText(int num, String str) {
@@ -99,5 +100,27 @@ public class Homework02 {
             array[j] = num;
         }
         System.out.println(Arrays.toString(array));
+    }
+
+    public static void compareSumElements(int[] array) {
+        int totalSum = 0;
+
+        for (int i = 0; i < array.length; i++) {
+            totalSum += array[i];
+        }
+
+        int leftSum = array[0];
+        int rightSum = totalSum - array[0];
+
+        for (int i = 0; i < array.length; i++) {
+            if (leftSum == rightSum) {
+                System.out.println("Точка в массиве найдена, индекс элемента = " + i);
+                return;
+            } else {
+                leftSum += array[i];
+                rightSum -= array[i];
+            }
+        }
+        System.out.println("Точки в массиве нет");
     }
 }

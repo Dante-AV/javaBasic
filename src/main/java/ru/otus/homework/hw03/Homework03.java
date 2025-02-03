@@ -1,11 +1,17 @@
 package ru.otus.homework.hw03;
 
+import java.util.Arrays;
+
 public class Homework03 {
     public static void main(String[] args) {
         System.out.println(sumOfPositiveElements(new int[][]{{-1, 2, -3}, {4, -5, 6}}));
         squareOfSymbols(4);
-        diagonalElementsinArray(new int[][]{{1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}});
-        findMax(new int[][]{{0, 2, 3, 4}, {1, 2, 30, 4}});
+
+        int[][] array = new int[][]{{1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}};
+        diagonalElementsinArray(array);
+        print(array);
+
+        System.out.println(findMax(new int[][]{{0, 2, 3, 4}, {1, 2, 30, 4}}));
         System.out.println(sumElements(new int[][]{{1, 2, 3, 4}, {10, 20, 30, 40}}));
     }
 
@@ -22,10 +28,9 @@ public class Homework03 {
     }
 
     public static void squareOfSymbols(int size) {
-        int[][] array = new int[size][size];
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++) {
-                System.out.print('*' + " ");
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print("* ");
             }
             System.out.println();
         }
@@ -33,23 +38,19 @@ public class Homework03 {
 
     public static void diagonalElementsinArray(int[][] array) {
         for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array[i].length; j++) {
-                array[i][i] = 0;
-                array[i][array.length - i - 1] = 0;
-                System.out.print(array[i][j]);
-            }
-            System.out.println();
+            array[i][i] = 0;
+            array[i][array.length - i - 1] = 0;
         }
     }
 
-    public static void findMax(int[][] array) {
+    public static int findMax(int[][] array) {
         int max = array[0][0];
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[i].length; j++) {
                 max = Math.max(max, array[i][j]);
             }
         }
-        System.out.println(max);
+        return max;
     }
 
     public static int sumElements(int[][] array) {
@@ -59,8 +60,14 @@ public class Homework03 {
 
         int sum = 0;
         for (int i = 0; i < array[1].length; i++) {
-            sum += array[array.length - 1][i];
+            sum += array[1][i];
         }
         return sum;
+    }
+
+    public static void print(int[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.println(Arrays.toString(array[i]));
+        }
     }
 }

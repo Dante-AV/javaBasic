@@ -8,8 +8,8 @@ public class Horse extends Animal {
     @Override
     public int swim(int distance) {
         System.out.println("\n" + "Лошадь по имени " + name + " плывет");
-        endurance = endurance - distance;
-        if (endurance >= 0) {
+        endurance = endurance - distance * 4;
+        if (endurance > 0) {
             int time = distance / speedRun;
             System.out.println("Лошадь по имени " + name + " проплыла " + distance + "м. со скоростью " + speedRun + "м/c");
             return time;

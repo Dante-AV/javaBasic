@@ -10,7 +10,7 @@ public class Main {
         Dog dog = new Dog("Шарик", 5, 7, 9);
         Horse horse = new Horse("Джек", 10, 10, 20);
 
-        cat.run(2);
+        cat.run(5);
         cat.info();
         cat.swim(2);
 

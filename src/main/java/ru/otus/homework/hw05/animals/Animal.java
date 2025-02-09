@@ -21,12 +21,13 @@ public abstract class Animal {
 
     public int run(int distance) {
         System.out.println("\n" + "Животное по имени " + name + " бежит");
-        endurance = endurance - distance;
-        if (endurance >= 0) {
+        if (endurance - distance > 0) {
+            endurance = endurance - distance;
             int time = distance / speedRun;
             System.out.println("Животное по имени " + name + " пробежало " + distance + "м. со скоростью " + speedRun + "м/c");
             return time;
         } else {
+            endurance = 0;
             System.out.println("У животного с именем " + name + " появилось состоние усталости");
             return -1;
         }

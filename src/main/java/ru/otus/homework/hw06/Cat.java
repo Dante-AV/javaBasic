@@ -10,10 +10,6 @@ public class Cat {
         this.appetite = appetite;
     }
 
-    public boolean isSatiety() {
-        return satiety;
-    }
-
     public void eat(Plate plate) {
         System.out.println("Кот " + name + " ест");
         if (plate.removeFood(appetite)) {
@@ -22,7 +18,7 @@ public class Cat {
     }
 
     public void printInfo() {
-        if (isSatiety()) {
+        if (satiety) {
             System.out.println("Кот " + name + " сыт");
         } else {
             System.out.println("Коту " + name + " мало еды");

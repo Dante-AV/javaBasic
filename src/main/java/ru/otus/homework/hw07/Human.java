@@ -1,6 +1,6 @@
 package ru.otus.homework.hw07;
 
-public class Human implements Moveable, OpportunityToBurn {
+public class Human implements OpportunityToBurn {
     private String name;
     private Moveable currentTransport;
     private int strength;
@@ -15,10 +15,6 @@ public class Human implements Moveable, OpportunityToBurn {
         return strength;
     }
 
-    public void setCurrentTransport(Moveable currentTransport) {
-        this.currentTransport = currentTransport;
-    }
-
     public void sitDown(Moveable transport) {
         if (!(currentTransport instanceof Human)) {
             currentTransport = transport;
@@ -27,11 +23,10 @@ public class Human implements Moveable, OpportunityToBurn {
     }
 
     public void standUp() {
-        setCurrentTransport(null);
+        this.currentTransport = null;
         System.out.println("Человек покинул транспорт");
     }
 
-    @Override
     public boolean move(int distance, TerrainType terrainType) {
         if (currentTransport != null) {
             return currentTransport.move(distance, terrainType);
@@ -39,7 +34,6 @@ public class Human implements Moveable, OpportunityToBurn {
             return walk(distance);
         }
     }
-
 
     public boolean walk(int distance) {
         if (expend(distance)) {

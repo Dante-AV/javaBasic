@@ -21,7 +21,6 @@ public class Main {
         horse.move(20, PLAIN);
         human.standUp();
         human.sitDown(bike);
-        bike.setHuman(human);
         human.move(15, PLAIN);
         human.move(5, SWAMP);
         human.standUp();

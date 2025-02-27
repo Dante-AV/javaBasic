@@ -1,7 +1,6 @@
 package ru.otus.homework.hw07;
 
 public class Bike implements Moveable {
-
     private Human human;
 
     @Override

@@ -28,5 +28,4 @@ public class AllTerrainVehicle implements Moveable, OpportunityToBurn {
             return false;
         }
     }
-
 }

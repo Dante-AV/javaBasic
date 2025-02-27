@@ -5,7 +5,6 @@ public class Human implements OpportunityToBurn {
     private Moveable currentTransport;
     private int strength;
 
-
     public Human(String name, int strength) {
         this.name = name;
         this.strength = strength;
@@ -18,8 +17,11 @@ public class Human implements OpportunityToBurn {
     public void sitDown(Moveable transport) {
         if (!(currentTransport instanceof Human)) {
             currentTransport = transport;
-            System.out.println("Человек сел на транспорт");
         }
+        if (currentTransport instanceof Bike) {
+            ((Bike) currentTransport).setHuman(Human.this);
+        }
+        System.out.println("Человек сел на транспорт");
     }
 
     public void standUp() {

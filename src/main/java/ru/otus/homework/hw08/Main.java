@@ -16,21 +16,19 @@ public class Main {
     public static int sumElements(String[][] array) {
         int num = 0;
         int sum = 0;
-        for (String[] row : array) {
-            if (row.length != 4) {
-                throw new AppArraySizeException("Массив другого размера, не 4х4");
-            } else {
-                for (int i = 0; i < array.length; i++) {
-                    for (int j = 0; j < array[i].length; j++) {
-                        try {
-                            if (array[i][j] == null) {
-                                throw new AppArrayDataException(String.format("Null в ячейке [%d][%d]", i, j), array[i][j].indexOf(array[i][j]));
-                            }
-                            num = Integer.parseInt(array[i][j]);
-                            sum += num;
-                        } catch (NumberFormatException e) {
-                            throw new AppArrayDataException("Некорректные данные лежат в ячейке под номером ", num);
+        if (array.length != 4 || array[0].length != 4) {
+            throw new AppArraySizeException("Массив другого размера, не 4х4");
+        } else {
+            for (int i = 0; i < array.length; i++) {
+                for (int j = 0; j < array[i].length; j++) {
+                    try {
+                        if (array[i][j] == null) {
+                            throw new AppArrayDataException(String.format("Null в ячейке [%d][%d]", i, j), array[i][j].indexOf(array[i][j]));
                         }
+                        num = Integer.parseInt(array[i][j]);
+                        sum += num;
+                    } catch (NumberFormatException e) {
+                        throw new AppArrayDataException("Некорректные данные лежат в ячейке под номером ", num);
                     }
                 }
             }

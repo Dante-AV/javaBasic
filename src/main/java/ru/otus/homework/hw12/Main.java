@@ -1,5 +1,7 @@
 package ru.otus.homework.hw12;
 
+import ru.otus.homework.hw08.AppArrayDataException;
+
 import java.io.*;
 import java.util.*;
 
@@ -28,8 +30,11 @@ public class Main {
             if (file.getName().equals(name)) {
                 myNameFiles = file.getName();
                 break;
+            } else {
+                throw new MyException("Такого файла нет");
             }
         }
+
         if (myNameFiles != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(myNameFiles)))) {
                 String line;

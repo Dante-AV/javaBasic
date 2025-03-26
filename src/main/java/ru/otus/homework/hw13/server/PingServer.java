@@ -36,22 +36,32 @@ public class PingServer {
 
         if (matcher.find()) {
             operation = matcher.group(0);
+            result = calculation(operation, numbers);
         } else {
             System.out.println("No operation found");
-        }
-
-        if (Objects.equals(operation, "+")) {
-            result = Integer.parseInt(numbers[0]) + Integer.parseInt(numbers[1]);
-        } else if (Objects.equals(operation, "*")) {
-            result = Integer.parseInt(numbers[0]) * Integer.parseInt(numbers[1]);
-        } else if (Objects.equals(operation, "/")) {
-            result = Integer.parseInt(numbers[0]) / Integer.parseInt(numbers[1]);
-        } else if (Objects.equals(operation, "-")) {
-            result = Integer.parseInt(numbers[0]) - Integer.parseInt(numbers[1]);
         }
 
         System.out.println("result: " + result);
         outputStream.writeUTF(String.valueOf(result));
         outputStream.flush();
+    }
+
+    public static int calculation(String operation, String[] numbers) {
+        int result = 0;
+
+        switch (Objects.requireNonNull(operation)) {
+            case "+":
+                result = Integer.parseInt(numbers[0]) + Integer.parseInt(numbers[1]);
+                break;
+            case "*":
+                result = Integer.parseInt(numbers[0]) * Integer.parseInt(numbers[1]);
+                break;
+            case "/":
+                result = Integer.parseInt(numbers[0]) / Integer.parseInt(numbers[1]);
+                break;
+            case "-":
+                result = Integer.parseInt(numbers[0]) - Integer.parseInt(numbers[1]);
+        }
+        return result;
     }
 }

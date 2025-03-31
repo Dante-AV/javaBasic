@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class ClientHandler {
     private Socket socket;
@@ -35,8 +36,10 @@ public class ClientHandler {
                             sendMsg("/exitok");
                             break;
                         }
-                        if (message.startsWith("/w")) {
-                            server.oneClientMessage(line[1], username + ": " + line[2]);
+                        if (line.length == 3) {
+                            if (message.startsWith("/w")) {
+                                server.oneClientMessage(line[1], username + ": " + line[2]);
+                            }
                         }
                     } else {
                         server.broadcastMessage(username + ": " + message);
@@ -65,28 +68,11 @@ public class ClientHandler {
     public void disconnect() {
         server.unsubscribe(this);
         try {
-            if (in != null) {
-                in.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        try {
-            if (out != null) {
-                out.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        try {
             if (socket != null) {
                 socket.close();
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            System.out.println("Ошибка при закрытии соединения: " + e.getMessage());
         }
     }
 }

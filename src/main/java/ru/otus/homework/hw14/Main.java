@@ -12,6 +12,7 @@ public class Main {
         });
 
         thread.start();
+        thread.join();
         System.out.println(System.currentTimeMillis() - time);
     }
 }

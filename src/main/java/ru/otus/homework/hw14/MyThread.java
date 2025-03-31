@@ -13,11 +13,6 @@ public class MyThread implements Runnable {
         this.array = array;
     }
 
-    public static void createAndStart(int index, double[] array) {
-        MyThread myThread = new MyThread(index, array);
-        myThread.thread.start();
-    }
-
     @Override
     public void run() {
         result = fillArray.newArray(index, array);

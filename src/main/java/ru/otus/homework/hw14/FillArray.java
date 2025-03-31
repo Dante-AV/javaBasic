@@ -1,7 +1,7 @@
 package ru.otus.homework.hw14;
 
 public class FillArray {
-    public synchronized double[] newArray(int index, double[] array) {
+    public double[] newArray(int index, double[] array) {
 
         int start = index * array.length / 4;
         int end = (index + 1) * array.length / 4;

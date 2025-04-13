@@ -59,7 +59,7 @@ public class ClientHandler {
                                 continue;
                             }
                             if (server.getAuthenticatedProvider().registration(
-                                    this, elements[1], elements[2], elements[3], elements[4])) {
+                                    this, elements[1], elements[2], elements[3], Roles.valueOf(elements[4]))) {
                                 authenticated = true;
                                 break;
                             }
@@ -81,14 +81,16 @@ public class ClientHandler {
                             }
                         }
                         if (line.length == 2) {
-                            if (server.getRole(username).equals("ADMIN")) {
-                                if (message.startsWith("/kick")) {
-                                    server.oneClientMessage(line[1], "Вас отключили от чата");
-                                    server.oneClientMessage(line[1], "/exitok");
-                                    continue;
-                                }
+                            if (message.startsWith("/kick") && (!username.equals((line[1])))) {
+                                server.oneClientMessage(line[1], "Вас отключили от чата");
+                                server.oneClientMessage(line[1], "/exitok");
+                            } else {
+                                server.oneClientMessage(username, "По команде /kick вы не можете выйти из чата, выйти из чата - команда /exit");
                             }
-                            server.oneClientMessage(username, "Роль не ADMIN, нет прав на отключение пользователей из чата");
+
+                            if (!server.getRole(username).equals(Roles.ADMIN)) {
+                                server.oneClientMessage(username, "Роль не ADMIN, нет прав на отключение пользователей из чата");
+                            }
                         }
                     } else {
                         server.broadcastMessage(username + ": " + message);

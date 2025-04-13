@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server {
-    private int port;
-    private List<ClientHandler> clients;
-    private AuthenticatedProvider authenticatedProvider;
+    private final int port;
+    private final List<ClientHandler> clients;
+    private final AuthenticatedProvider authenticatedProvider;
 
     public Server(int port) {
         this.port = port;
@@ -69,7 +69,7 @@ public class Server {
         return authenticatedProvider;
     }
 
-    public String getRole(String username) {
+    public Roles getRole(String username) {
         return authenticatedProvider.getRole(username);
     }
 }

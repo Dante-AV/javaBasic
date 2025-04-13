@@ -1,33 +1,29 @@
 package ru.otus.chat;
 
-import javax.management.relation.Role;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
-    private class User {
-        private String login;
-        private String password;
-        private String username;
-        private String role;
+    private static class User {
+        private final String login;
+        private final String password;
+        private final String username;
 
-        public User(String login, String password, String username, String role) {
+        public User(String login, String password, String username) {
             this.login = login;
             this.password = password;
             this.username = username;
-            this.role = role;
         }
     }
 
     private Server server;
-    private List<User> users;
+    private ConcurrentHashMap<User, Roles> users;
 
     public InMemoryAuthenticatedProvider(Server server) {
         this.server = server;
-        this.users = new CopyOnWriteArrayList<>();
-        this.users.add(new User("qwe", "qwe", "qwe1", "ADMIN"));
-        this.users.add(new User("asd", "asd", "asd1", "USER"));
-        this.users.add(new User("zxc", "zxc", "zxc1", "USER"));
+        this.users = new ConcurrentHashMap<>();
+        this.users.put(new User("qwe", "qwe", "qwe1"), Roles.ADMIN);
+        this.users.put(new User("asd", "asd", "asd1"), Roles.USER);
+        this.users.put(new User("zxc", "zxc", "zxc1"), Roles.USER);
     }
 
     @Override
@@ -36,7 +32,8 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
     }
 
     private String getUsernameByLoginAndPassword(String login, String password) {
-        for (User user : users) {
+        ConcurrentHashMap.KeySetView<User, Roles> key = users.keySet();
+        for (User user : key) {
             if (user.login.equals(login) && user.password.equals(password)) {
                 return user.username;
             }
@@ -45,7 +42,8 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
     }
 
     private boolean isLoginAlreadyExist(String login) {
-        for (User user : users) {
+        ConcurrentHashMap.KeySetView<User, Roles> key = users.keySet();
+        for (User user : key) {
             if (user.login.equals(login)) {
                 return true;
             }
@@ -54,7 +52,8 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
     }
 
     private boolean isUsernameAlreadyExist(String username) {
-        for (User user : users) {
+        ConcurrentHashMap.KeySetView<User, Roles> key = users.keySet();
+        for (User user : key) {
             if (user.username.equals(username)) {
                 return true;
             }
@@ -81,7 +80,7 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
     }
 
     @Override
-    public boolean registration(ClientHandler clientHandler, String login, String password, String username, String role) {
+    public boolean registration(ClientHandler clientHandler, String login, String password, String username, Roles role) {
         if (login.trim().length() < 3 || password.trim().length() < 3 || username.trim().length() < 3) {
             clientHandler.sendMsg("Логин 3+ символа, пароль 3+ символа, имя пользователя 3+ символа");
             return false;
@@ -94,7 +93,7 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
             clientHandler.sendMsg("Указанное имя пользователя уже занято");
             return false;
         }
-        users.add(new User(login, password, username, role));
+        users.put(new User(login, password, username), role);
         clientHandler.setUsername(username);
         server.subscribe(clientHandler);
         clientHandler.sendMsg("/regok " + username);
@@ -102,11 +101,11 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
     }
 
     @Override
-    public String getRole(String username) {
-        String role = null;
-        for (var client : this.users) {
-            if (username.equals(client.username)) {
-                role = String.valueOf(client.role);
+    public Roles getRole(String username) {
+        Roles role = null;
+        for (var user : users.keySet()) {
+            if (username.equals(user.username)) {
+                role = users.get(user);
             }
         }
         return role;

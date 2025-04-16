@@ -1,29 +1,51 @@
 package ru.otus.chat;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.sql.*;
+import java.sql.PreparedStatement;
 
 public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
-    private static class User {
-        private final String login;
-        private final String password;
-        private final String username;
 
-        public User(String login, String password, String username) {
-            this.login = login;
-            this.password = password;
-            this.username = username;
+    private final Server server;
+
+    private static final String USERS_ROLES_QUERY = """
+            select role from roles
+            join users on roles.id = users.role_id
+            where users.username = ?
+            """;
+
+    private static final String USERNAME_QUERY = """
+            select username from users
+            where login = ? and password = ?
+            """;
+
+    private static final String USER_IS_EXIST_QUERY = """
+                    select count(1) from users
+                    where login = ? or username = ?
+            """;
+
+    private static final String FIND_ROLE_ID_QUERY = """
+                    select id from roles
+                    where role = ?
+            """;
+
+    private static final String ADD_NEW_USER_QUERY = """
+                    insert into users (login, password, username, role_id) values (?, ?, ?, ?)
+            """;
+
+
+    private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/postgres";
+    public Connection connection;
+
+    {
+        try {
+            connection = DriverManager.getConnection(DATABASE_URL, "postgres", "password");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private Server server;
-    private ConcurrentHashMap<User, Roles> users;
-
     public InMemoryAuthenticatedProvider(Server server) {
         this.server = server;
-        this.users = new ConcurrentHashMap<>();
-        this.users.put(new User("qwe", "qwe", "qwe1"), Roles.ADMIN);
-        this.users.put(new User("asd", "asd", "asd1"), Roles.USER);
-        this.users.put(new User("zxc", "zxc", "zxc1"), Roles.USER);
     }
 
     @Override
@@ -31,34 +53,81 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
         System.out.println("initialize InMemoryAuthenticatedProvider");
     }
 
+    @Override
+    public String getRole(String username) {
+        String role = null;
+        try (PreparedStatement ps = connection.prepareStatement(USERS_ROLES_QUERY)) {
+            ps.setString(1, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    role = rs.getString(1);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return role;
+    }
+
     private String getUsernameByLoginAndPassword(String login, String password) {
-        ConcurrentHashMap.KeySetView<User, Roles> key = users.keySet();
-        for (User user : key) {
-            if (user.login.equals(login) && user.password.equals(password)) {
-                return user.username;
+        String username = null;
+        try (PreparedStatement ps = connection.prepareStatement(USERNAME_QUERY)) {
+            ps.setString(1, login);
+            ps.setString(2, password);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    username = rs.getString(1);
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return null;
+        return username;
     }
 
-    private boolean isLoginAlreadyExist(String login) {
-        ConcurrentHashMap.KeySetView<User, Roles> key = users.keySet();
-        for (User user : key) {
-            if (user.login.equals(login)) {
-                return true;
+    private void addUser(String login, String password, String username, String role) {
+        Role currentRole = new Role();
+        try (PreparedStatement ps = connection.prepareStatement(FIND_ROLE_ID_QUERY)) {
+            if (role.equals("ADMIN")) {
+                ps.setString(1, "ADMIN");
+            } else {
+                ps.setString(1, "USER");
             }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    currentRole.setId(rs.getInt(1));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return false;
+
+        try (PreparedStatement ps = connection.prepareStatement(ADD_NEW_USER_QUERY)) {
+            ps.setString(1, login);
+            ps.setString(2, password);
+            ps.setString(3, username);
+            ps.setInt(4, currentRole.getId());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private boolean isUsernameAlreadyExist(String username) {
-        ConcurrentHashMap.KeySetView<User, Roles> key = users.keySet();
-        for (User user : key) {
-            if (user.username.equals(username)) {
-                return true;
+    private boolean isUserAlreadyExist(String login, String username) {
+        int flag = 0;
+        try (PreparedStatement ps = connection.prepareStatement(USER_IS_EXIST_QUERY)) {
+            ps.setString(1, login);
+            ps.setString(2, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    flag = rs.getInt(1);
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        return false;
+        return flag == 1;
     }
 
     @Override
@@ -80,34 +149,20 @@ public class InMemoryAuthenticatedProvider implements AuthenticatedProvider {
     }
 
     @Override
-    public boolean registration(ClientHandler clientHandler, String login, String password, String username, Roles role) {
+    public boolean registration(ClientHandler clientHandler, String login, String password, String username, String role) {
         if (login.trim().length() < 3 || password.trim().length() < 3 || username.trim().length() < 3) {
             clientHandler.sendMsg("Логин 3+ символа, пароль 3+ символа, имя пользователя 3+ символа");
             return false;
         }
-        if (isLoginAlreadyExist(login)) {
-            clientHandler.sendMsg("Указанный логин уже занят");
+        if (isUserAlreadyExist(login, username)) {
+            clientHandler.sendMsg("Логин/имя пользователя уже занято");
             return false;
         }
-        if (isUsernameAlreadyExist(username)) {
-            clientHandler.sendMsg("Указанное имя пользователя уже занято");
-            return false;
-        }
-        users.put(new User(login, password, username), role);
+
+        addUser(login, password, username, role);
         clientHandler.setUsername(username);
         server.subscribe(clientHandler);
         clientHandler.sendMsg("/regok " + username);
         return true;
-    }
-
-    @Override
-    public Roles getRole(String username) {
-        Roles role = null;
-        for (var user : users.keySet()) {
-            if (username.equals(user.username)) {
-                role = users.get(user);
-            }
-        }
-        return role;
     }
 }

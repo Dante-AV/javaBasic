@@ -59,7 +59,7 @@ public class ClientHandler {
                                 continue;
                             }
                             if (server.getAuthenticatedProvider().registration(
-                                    this, elements[1], elements[2], elements[3], Roles.valueOf(elements[4]))) {
+                                    this, elements[1], elements[2], elements[3], elements[4])) {
                                 authenticated = true;
                                 break;
                             }
@@ -87,8 +87,7 @@ public class ClientHandler {
                             } else {
                                 server.oneClientMessage(username, "По команде /kick вы не можете выйти из чата, выйти из чата - команда /exit");
                             }
-
-                            if (!server.getRole(username).equals(Roles.ADMIN)) {
+                            if (!server.getRole(username).equals("ADMIN")) {
                                 server.oneClientMessage(username, "Роль не ADMIN, нет прав на отключение пользователей из чата");
                             }
                         }

@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  otus-db:
+    image: postgres:13
+    container_name: 842af1e4d9f8_gallant_newton
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres

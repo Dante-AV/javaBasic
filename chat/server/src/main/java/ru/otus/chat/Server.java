@@ -69,7 +69,7 @@ public class Server {
         return authenticatedProvider;
     }
 
-    public Roles getRole(String username) {
+    public String getRole(String username) {
         return authenticatedProvider.getRole(username);
     }
 }

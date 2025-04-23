@@ -31,13 +31,19 @@ public class Box<T extends Fruit> implements Comparable<Box<? extends Fruit>> {
             for (T fruit : fruits) {
                 box2.addFruit(fruit);
             }
-            fruits.clear();
+            this.fruits.clear();
             System.out.println("Перемещение фруктов выполнено успешно");
         }
     }
 
     @Override
     public int compareTo(Box<? extends Fruit> box) {
-        return Math.abs(this.weightOfBox() - box.weightOfBox()) < 0.0001 ? 1 : 0;
+        if ((this.weightOfBox() - box.weightOfBox()) < 0.0001){
+            return 0;
+        } else if ((this.weightOfBox() - box.weightOfBox()) >0.0001){
+            return 1;
+        } else{
+            return -1;
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ru.otus.homework.hw19;
 
-import ru.otus.homework.hw12.MyException;
-
 import java.io.*;
 import java.util.Scanner;
 import java.nio.charset.StandardCharsets;

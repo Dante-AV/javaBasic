@@ -11,7 +11,7 @@ public class Main {
         System.out.println("Введите имя файла и текст");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
-        String[] text = line.split(" ");
+        String[] text = line.split(" ", 2);
         String fileName = text[0];
         int count = 0;
 
@@ -28,7 +28,7 @@ public class Main {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.err.println("Ошибка: " + e.getMessage());
         }
         System.out.println("Количество слов " + text[1] + " в файле " + fileName + ": " + count);
     }
